@@ -1,18 +1,18 @@
 <template>
     <div class="home">
-        <van-list
+        <!-- <van-list
         v-model="loading"
         :finished="finished"
         finished-text="没有更多了"
         @load="onLoad"
-        >
+        > -->
         <van-grid  :border="false" icon-size:49 :column-num="3">
           <van-grid-item v-for="item in newVideoList"  :key="item.id" :to='"/video/detail/" + item.id'>
             <van-image Lazyload :src="item.img_url" />
             <span class="video-title">{{item.title}}</span>
           </van-grid-item>
           </van-grid>
-        </van-list>
+        <!-- </van-list> -->
     </div>
   </template>
 
@@ -31,23 +31,23 @@ export default {
     this.getVideoList()
   },
   methods: {
-    onLoad () {
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
+    // onLoad () {
+    //   // 异步更新数据
+    //   // setTimeout 仅做示例，真实场景中一般为 ajax 请求
+    //   setTimeout(() => {
+    //     for (let i = 0; i < 10; i++) {
+    //       this.list.push(this.list.length + 1)
+    //     }
 
-        // 加载状态结束
-        this.loading = false
+    //     // 加载状态结束
+    //     this.loading = false
 
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
-    },
+    //     // 数据全部加载完成
+    //     if (this.list.length >= 40) {
+    //       this.finished = true
+    //     }
+    //   }, 1000)
+    // },
     async getVideoList () {
       // 这里用try catch包裹，请求失败的时候就执行catch里的
       var _this = this
