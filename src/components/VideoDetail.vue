@@ -1,14 +1,17 @@
 <template>
     <div class="video-detail">
       <van-icon name="arrow-left" @click="routerback" />
-      <iframe
-          id="iframeContain"
+        <div class="iframeContain">
+          <iframe
+          :class="{'iframeContain':showIframe}"
           name="iframeContain"
           seamless
           scrolling="yes"
+          v-show="showIframe"
           :src = play_url
-        >
-       </iframe>
+          >
+          </iframe>
+        </div>
        <div class="header">
         <h2>{{videoInfo.title}}</h2>
         <span>{{videoInfo.desc}}</span>
@@ -18,7 +21,7 @@
        <van-dropdown-menu>
         <van-dropdown-item v-model="parsing_url" :options="lineData" :click="onSwitchLine()" />
       </van-dropdown-menu>
-       <div class="series-content">
+       <div class="series-content" v-show="isList">
          <p>剧集</p>
          <div class="series-list" >
           <div v-for="(item, index) in videoSeriesList" v-bind:key="index">
@@ -40,6 +43,8 @@ export default {
       parsing_url: '',
       url: '',
       play_url: null,
+      showIframe: false,
+      isList: true,
       lineData: [
       ]
     }
@@ -51,7 +56,7 @@ export default {
   },
   methods: {
     routerback: function () {
-      this.$router.back(-1)
+      this.$router.push({path: '/'})
     },
     onSwitch: function (url, index) {
       this.play_url = this.parsing_url + url
@@ -73,6 +78,9 @@ export default {
         let res = await this.$api.Video.getVideoInfo(params)
         _this.videoInfo = res.data
 
+        if (res) {
+          this.showIframe = true
+        }
         console.log('返回详情数据data', res.data)
         console.log('返回数据', res)
       } catch (e) {
@@ -91,6 +99,10 @@ export default {
           id: id
         }
         let res = await this.$api.Video.getSeriesList(params)
+        console.log('长度：' + res.data.length)
+        if (res.data.length === 1) {
+          this.isList = false
+        }
         _this.videoSeriesList = res.data
 
         console.log('返回数据data', res.data)
@@ -143,7 +155,7 @@ export default {
       width: 100%;
     }
   /** iframe样式 */
-  #iframeContain{
+  .iframeContain{
       width: 100%;
       height: 80%;
   }
@@ -158,9 +170,10 @@ export default {
   }
   .van-icon-arrow-left {
     float: left;
+    width: 2.5rem;
     line-height: 2.375rem;
     background: rgb(255,255,255);
-    padding: 0 3px 0 10px;
+    padding: 0 3px 0 2px;
   }
   .c-glyphicon-albumPlay {
     content: "\e865";
