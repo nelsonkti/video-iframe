@@ -21,8 +21,8 @@
        <div class="series-content">
          <p>剧集</p>
          <div class="series-list" >
-          <div v-for="item in videoSeriesList" v-bind:key="item.series_id">
-            <van-button class="series-num" @click=onSwitch(item.url)>{{item.series_id}}</van-button>
+          <div v-for="(item, index) in videoSeriesList" v-bind:key="index">
+            <van-button class="series-num" :class=" selectVideoIndex === index? 'c-glyphicon-albumPlay': ''" @click=onSwitch(item.url,index)>{{item.series_id}}</van-button>
           </div>
          </div>
        </div>
@@ -34,6 +34,7 @@ export default {
   name: 'VideoDetail',
   data () {
     return {
+      selectVideoIndex: 0,
       videoInfo: [],
       videoSeriesList: [],
       parsing_url: '',
@@ -52,9 +53,10 @@ export default {
     routerback: function () {
       this.$router.back(-1)
     },
-    onSwitch: function (url) {
+    onSwitch: function (url, index) {
       this.play_url = this.parsing_url + url
       this.url = url
+      this.selectVideoIndex = index
     },
     onSwitchLine: function () {
       this.play_url = this.parsing_url + this.url
@@ -159,5 +161,10 @@ export default {
     line-height: 2.375rem;
     background: rgb(255,255,255);
     padding: 0 3px 0 10px;
+  }
+  .c-glyphicon-albumPlay {
+    content: "\e865";
+    color: #20bc22;
+    font-weight: 600;
   }
   </style>
